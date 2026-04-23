@@ -16,11 +16,7 @@ DETECTED_TZ=$(curl -s http://ip-api.com/line?fields=timezone)
 echo "Timezone detected: ${DETECTED_TZ}"
 
 # Installing required tools first
-pkg update && pkg upgrade -y
-if [ ! -x "$(command -v proot-distro)" ]; then
-	pkg install proot-distro -y
-fi
-pkg install nano vim git curl -y
+. ./setup-termux.sh
 
 # Adding Ubuntu 24.04 into the proot install list
 if [ ! -f "$PREFIX/etc/proot-distro/${PROOT_DIST}" ]; then
