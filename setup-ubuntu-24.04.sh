@@ -28,13 +28,20 @@ TARBALL_STRIP_OPT=0
 EOF
 fi
 
-if [ ! -d "$PREFIX/var/lib/proot-distro/installed-rootfs/${PROOT_DIST}" ]; then
+PROOT_ROOT="${PREFIX}/var/lib/proot-distro/installed-rootfs/${PROOT_DIST}"
+if [ ! -d "${PROOT_ROOT}" ]; then
 	proot-distro install "${PROOT_DIST}"
 fi
 
+# Installing some packages
 proot-distro login ${PROOT_DIST} -- bash -c "export DEBIAN_FRONTEND=noninteractive; export TZ=${DETECTED_TZ}; ln -snf /usr/share/zoneinfo/\$TZ /etc/localtime; apt update && apt upgrade -y && apt install -y sudo build-essential curl wget git adduser ca-certificates software-properties-common tzdata locales" && \
 proot-distro login ${PROOT_DIST} -- adduser "${PROOT_UNAME}" && \
 proot-distro login ${PROOT_DIST} -- usermod -aG sudo "${PROOT_UNAME}"
+
+# Installing Starship for the user
+proot-distro login ${PROOT_DIST} -- bash -c 'curl -sS https://starship.rs/install.sh | sh'
+echo 'eval "$(starship init bash)"' >> ${PROOT_ROOT}/home/${PROOT_UNAME}/.bashrc
+
 
 echo "New user ${PROOT_UNAME} in proot container ${PROOT_DIST} added!!"
 
