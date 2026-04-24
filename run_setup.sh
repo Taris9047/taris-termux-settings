@@ -35,7 +35,7 @@ select opt in "${options[@]}"; do
       termux_setup
       break
       ;;
-    "Termux+Ubuntu-24.04")
+    "Termux+ubuntu-24.04")
       linux_setup "ubuntu-24.04"
       break
       ;;
