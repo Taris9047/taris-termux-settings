@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+#
+# Main set up control script...
+#
+# TODO: Implement some fancy menu stuffs here...
+#

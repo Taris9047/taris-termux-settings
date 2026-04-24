@@ -5,6 +5,9 @@
 # At the moment, we are forcing it to use Ubuntu 24.04 LTS version.
 # 
 
+# Check script dir
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 # proot container username
 PROOT_UNAME=taris
 
@@ -16,7 +19,7 @@ DETECTED_TZ=$(curl -s http://ip-api.com/line?fields=timezone)
 echo "Timezone detected: ${DETECTED_TZ}"
 
 # Installing required tools first
-. ./setup-termux.sh
+. ${SCRIPT_DIR}/../termux/setup-termux.sh
 
 # Adding Ubuntu 24.04 into the proot install list
 if [ ! -f "$PREFIX/etc/proot-distro/${PROOT_DIST}" ]; then
