@@ -49,6 +49,18 @@ pkg install -y "${basic_programs[@]}"
 # Setting up git
 if [ -x "$(command -v git)" ]; then
 	ln -sfv "${DOTF_DIR}/gitignore" "${HOME}/.gitignore"
+	ln -sfv "${DOTF_DIR}/gitconfig" "${HOME}/.gitconfig.conf"
+
+	if [ ! -f "${HOME}/.gitconfig" ]; then
+		cp /dev/null "${HOME}/.gitconfig"
+	fi
+
+	if [ -f "${HOME}/.gitconfig" ]; then
+		if ! grep -q "path = ${HOME}/.gitconfig.conf"; then
+			printf "[include]\n\tpath = ${HOME}/.gitconfig.conf\n" >> "${HOME}/.gitconfig"
+		fi
+	fi
+	printf '>>> Make sure prepare your gitconfig.local'
 fi
 
 # Installing starship
