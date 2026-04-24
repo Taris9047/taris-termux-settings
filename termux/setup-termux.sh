@@ -55,12 +55,13 @@ if [ -x "$(command -v git)" ]; then
 		cp /dev/null "${HOME}/.gitconfig"
 	fi
 
+	gitconf_path="$(echo ${HOME}/.gitconfig.conf)"
 	if [ -f "${HOME}/.gitconfig" ]; then
-		if ! grep -q "path = ${HOME}/.gitconfig.conf"; then
-			printf "[include]\n\tpath = ${HOME}/.gitconfig.conf\n" >> "${HOME}/.gitconfig"
+		if ! grep -q "path = $(echo ${gitconf_path})" "${HOME}/.gitconfig"; then
+			printf "[include]\n\tpath = $(echo ${gitconf_path})\n" >> "${HOME}/.gitconfig"
 		fi
 	fi
-	printf '>>> Make sure prepare your gitconfig.local'
+	printf '>>> Make sure prepare your gitconfig.local\n'
 fi
 
 # Installing starship

@@ -22,7 +22,7 @@ echo "Timezone detected: ${DETECTED_TZ}"
 bash "${SCRIPT_DIR}/../termux/setup-termux.sh"
 
 # Adding Ubuntu 24.04 into the proot install list
-if [ ! -f "$PREFIX/etc/proot-distro/${PROOT_DIST}" ]; then
+if [ ! -d "$PREFIX/etc/proot-distro/${PROOT_DIST}" ]; then
 cat << 'EOF' > $PREFIX/etc/proot-distro/ubuntu-24.04.sh
 DISTRO_NAME="Ubuntu 24.04 (Noble)"
 TARBALL_URL['aarch64']="https://cdimage.ubuntu.com/ubuntu-base/releases/24.04/release/ubuntu-base-24.04.4-base-arm64.tar.gz"
