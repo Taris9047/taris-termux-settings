@@ -55,12 +55,20 @@ fi
 
 # Putting in Termux specific environment varirables into PROOT user's directory
 #
-
+PROOT_PREFIX="$(echo ${PREFIX})"
+PROOT_HOME="$(echo ${HOME})"
+PROOT_ENV_FILE="$(echo /home/${PROOT_UNAME}/.proot_env)"
+proot-distro login --user ${PROOT_UNAME} ${PROOT_DIST} -- bash -c "cp -f /dev/null ${PROOT_ENV_FILE} && echo 'PROOT_PREFIX=${PROOT_PREFIX}' >> ${PROOT_ENV_FILE} && echo 'PROOT_HOME=${PROOT_HOME}' >> ${PROOT_ENV_FILE}"
+if ! proot-distro login --user ${PROOT_UNAME} ${PROOT_DIST} -- grep -q ".proot_env" "/home/${PROOT_UNAME}/.bashrc"; then
+	proot-distro login --user ${PROOT_UNAME} ${PROOT_DIST} -- bash -c "echo '. /home/${PROOT_UNAME}/.proot_env' >> /home/${PROOT_UNAME}/.bashrc"
+	printf '>>> Checking PROOT environmment variable from proot distro\n'
+	proot-distro login --user ${PROOT_UNAME} ${PROOT_DIST} -- bash -c '. ~/.bashrc && echo PROOT_PREFIX=${PROOT_PREFIX} && echo PROOT_HOME=${PROOT_HOME}'
+fi
 
 # Now run the proot setup script as proot
 #
-printf '>>> Running setup script as proot user\n'
-proot-distro login ${PROOT_DIST} -- bash -c "bash -c \"${SCRIPT_DIR}/setup-proot-${PROOT_DIST}.sh\""
+printf '>>> Running setup script as proot user: %s\n' "${PROOT_UNAME}"
+proot-distro login --user ${PROOT_UNAME} ${PROOT_DIST} -- bash -c "bash -c \"${SCRIPT_DIR}/setup-proot-${PROOT_DIST}.sh\""
 
 echo "Making symlink to start the proot Linux"
 ln -sfv  "${SCRIPT_DIR}/start-${PROOT_DIST}.sh" "${SCRIPT_DIR}/../start.sh"

@@ -16,6 +16,8 @@ inst_pkg_list=(
 	"m4"
 	"flex"
 	"bison"
+	"vim"
+	"nano"
 )
 
 #
@@ -24,6 +26,7 @@ inst_pkg_list=(
 TERM_PREFIX='/data/data/com.termux/files/usr/'
 TERM_HOME='/data/data/com.termux/files/home/'
 SETTINGS_DIR="${TERM_HOME}/.settings"
+DOTFILES_DIR="${SETTINGS_DIR}/dotfiles"
 
 #
 # Curtesy update
@@ -37,3 +40,14 @@ sudo apt update && sudo upgrade -y
 printf '>>>> In Proot: Installing some packages..\n'
 sudo apt install -y "${inst_pkg_list[@]}"
 
+#
+# Settign up vim
+#
+if [ -x "$(command -v vim)" ]; then
+	if [ ! -d "${HOME}/.vim" ]; then
+		mkdir -p "${HOME}/.vim"
+		ln -sfv "${DOTFILES_DIR}/vim/colors" "${HOME}/.vim/colors"
+		ln -sfv "${DOTFILES_DIR}/vim/terminal_colors" "${HOME}/.vim/terminal_colors"
+	fi
+	ln -sfv "${DOTFILES_DIR}/vimrc" "${HOME}/.vimrc"
+fi
