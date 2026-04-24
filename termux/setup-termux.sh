@@ -7,8 +7,22 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 DOTF_DIR="${SCRIPT_DIR}/../dotfiles/"
 
+# Basic programs
+basic_programs=(
+	"nano"
+	"vim"
+	"git"
+	"curl"
+	"which"
+	"npm"
+	"nodejs"
+	"wget"
+)
+list_basic_programs="${basic_programs[*]}"
+
 # Making sure .bashrc exists
 if [ ! -f "${HOME}/.bashrc" ]; then
+    # Sticking to old-school method since some Termux versions may not have touch!
 	cp /dev/null "${HOME}/.bashrc"
 fi
 
@@ -16,25 +30,33 @@ fi
 pkg update && pkg upgrade -y
 
 # Enable Android storage access 
-termux-setup-storage
+if [ ! -d "${HONME}/storage" ]; then
+	termux-setup-storage
+fi
 
 # Install Proot
 if [ ! -x "$(command -v proot-distro)" ]; then
 	pkg install proot-distro -y
 fi
-pkg install nano  vim git curl which npm nodejs -y
+pkg install "${list_basic_programs}" -y
 
 # Installing starship
 if [ ! -x "$(command -v starship)" ]; then
 	pkg install starship -y
-	echo 'eval "$(starship init bash)"' >> ~/.bashrc
+	if ! grep -q "starship init bash" "${HOME}/.bashrc"; then
+		echo 'eval "$(starship init bash)"' >> ~/.bashrc
+	fi
 fi
 
 #
 # Adding some convenient ls aliases
 #
-echo "alias ll='ls -alh'" >> ~/.bashrc
-echo "alias ls='ls -lh'" >> ~/.bashrc
+if ! grep -q "alias ll=" "${HOME}/.bashrc"; then
+	echo "alias ll='ls -alh'" >> ~/.bashrc
+fi
+if ! grep -q "alias ls=" "${HOME}/.bashrc"; then
+	echo "alias ls='ls -lh'" >> ~/.bashrc
+fi
 
 #
 # Installing configurations
@@ -42,6 +64,7 @@ echo "alias ls='ls -lh'" >> ~/.bashrc
 
 # VIM
 VIM_DIR="${HOME}/.vim"
+# Removing existing .vim directory to ensure correct installation of Plugged
 if [ -d "${VIM_DIR}" ]; then
 	rm -rf "${VIM_DIR}"
 fi
