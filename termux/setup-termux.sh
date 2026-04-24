@@ -46,6 +46,11 @@ if [ ! -x "$(command -v proot-distro)" ]; then
 fi
 pkg install -y "${basic_programs[@]}"
 
+# Setting up git
+if [ -x "$(command -v git)" ]; then
+	git config --global core.editor "/usr/bin/vim"
+fi
+
 # Installing starship
 if [ ! -x "$(command -v starship)" ]; then
 	pkg install starship -y
