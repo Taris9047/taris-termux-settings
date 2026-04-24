@@ -18,12 +18,18 @@ basic_programs=(
 	"nodejs"
 	"wget"
 )
-list_basic_programs="${basic_programs[*]}"
 
 # Making sure .bashrc exists
 if [ ! -f "${HOME}/.bashrc" ]; then
     # Sticking to old-school method since some Termux versions may not have touch!
 	cp /dev/null "${HOME}/.bashrc"
+fi
+
+# Running repo selection
+read -p "Would you like to run repo. change script? [y/n]" -n 1 -r
+echo ""
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+	termux-change-repo
 fi
 
 # Courtesy update
@@ -38,7 +44,7 @@ fi
 if [ ! -x "$(command -v proot-distro)" ]; then
 	pkg install proot-distro -y
 fi
-pkg install "${list_basic_programs}" -y
+pkg install -y "${basic_programs[@]}"
 
 # Installing starship
 if [ ! -x "$(command -v starship)" ]; then
@@ -66,7 +72,9 @@ fi
 VIM_DIR="${HOME}/.vim"
 # Removing existing .vim directory to ensure correct installation of Plugged
 if [ -d "${VIM_DIR}" ]; then
-	rm -rf "${VIM_DIR}"
+	if [ ! -d "${VIM_DIR}/plugged" ]; then
+		rm -rf "${VIM_DIR}"
+	fi
 fi
 mkdir -p "${VIM_DIR}"
 ln -sfv "${DOTF_DIR}/vim/colors" "${VIM_DIR}/colors"
