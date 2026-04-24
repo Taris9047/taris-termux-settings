@@ -51,10 +51,6 @@ if [ -x "$(command -v git)" ]; then
 	ln -sfv "${DOTF_DIR}/gitignore" "${HOME}/.gitignore"
 	ln -sfv "${DOTF_DIR}/gitconfig" "${HOME}/.gitconfig.conf"
 
-	if [ ! -f "${HOME}/.gitconfig" ]; then
-		cp /dev/null "${HOME}/.gitconfig"
-	fi
-
 	gitconf_path="$(echo ${HOME}/.gitconfig.conf)"
 	if [ -f "${HOME}/.gitconfig" ]; then
 		if ! grep -q "path = $(echo ${gitconf_path})" "${HOME}/.gitconfig"; then
