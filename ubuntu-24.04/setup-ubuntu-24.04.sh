@@ -53,11 +53,14 @@ if ! proot-distro login ${PROOT_DIST} -- command -v "/usr/local/bin/starship" &>
 	echo 'eval "$(starship init bash)"' >> ${PROOT_ROOT}/home/${PROOT_UNAME}/.bashrc
 fi
 
+# Putting in Termux specific environment varirables into PROOT user's directory
+#
+
+
 # Now run the proot setup script as proot
 #
 printf '>>> Running setup script as proot user\n'
 proot-distro login ${PROOT_DIST} -- bash -c "bash -c \"${SCRIPT_DIR}/setup-proot-${PROOT_DIST}.sh\""
-
 
 echo "Making symlink to start the proot Linux"
 ln -sfv  "${SCRIPT_DIR}/start-${PROOT_DIST}.sh" "${SCRIPT_DIR}/../start.sh"

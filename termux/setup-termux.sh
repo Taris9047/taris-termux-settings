@@ -36,7 +36,7 @@ fi
 pkg update && pkg upgrade -y
 
 # Enable Android storage access 
-if [ ! -d "${HONME}/storage" ]; then
+if [ ! -d "${HOME}/storage" ]; then
 	termux-setup-storage
 fi
 

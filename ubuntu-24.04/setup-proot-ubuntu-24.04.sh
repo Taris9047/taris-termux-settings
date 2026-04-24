@@ -29,7 +29,7 @@ SETTINGS_DIR="${TERM_HOME}/.settings"
 # Curtesy update
 #
 printf '>>>> In Proot: Running Curtesy Updates\n'
-sudo apt update && sudo updgrade -y
+sudo apt update && sudo upgrade -y
 
 #
 # Installing the packages from the package list
