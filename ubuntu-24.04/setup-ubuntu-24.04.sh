@@ -6,8 +6,7 @@
 # 
 
 # Check script dir
-#SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # proot container username
 PROOT_UNAME=taris
