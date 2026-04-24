@@ -6,7 +6,8 @@
 # 
 
 # Check script dir
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+#SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 # proot container username
 PROOT_UNAME=taris
@@ -19,7 +20,7 @@ DETECTED_TZ=$(curl -s http://ip-api.com/line?fields=timezone)
 echo "Timezone detected: ${DETECTED_TZ}"
 
 # Installing required tools first
-. ${SCRIPT_DIR}/../termux/setup-termux.sh
+. "${SCRIPT_DIR}/../termux/setup-termux.sh"
 
 # Adding Ubuntu 24.04 into the proot install list
 if [ ! -f "$PREFIX/etc/proot-distro/${PROOT_DIST}" ]; then
@@ -38,14 +39,17 @@ fi
 
 # Installing some packages
 proot-distro login ${PROOT_DIST} -- bash -c "export DEBIAN_FRONTEND=noninteractive; export TZ=${DETECTED_TZ}; ln -snf /usr/share/zoneinfo/\$TZ /etc/localtime; apt update && apt upgrade -y && apt install -y sudo build-essential curl wget git adduser ca-certificates software-properties-common tzdata locales" && \
-proot-distro login ${PROOT_DIST} -- adduser "${PROOT_UNAME}" && \
-proot-distro login ${PROOT_DIST} -- usermod -aG sudo "${PROOT_UNAME}"
+proot-distro login ${PROOT_DIST} -- bash -c "adduser ${PROOT_UNAME}" && \
+proot-distro login ${PROOT_DIST} -- bash -c "usermod -aG sudo ${PROOT_UNAME}"
 
 # Installing Starship for the user
-proot-distro login ${PROOT_DIST} -- bash -c 'curl -sS https://starship.rs/install.sh | sh'
-echo 'eval "$(starship init bash)"' >> ${PROOT_ROOT}/home/${PROOT_UNAME}/.bashrc
+if ! proot-distro login ${PROOT_DIST} -- command -v "/usr/local/bin/starship" &> /dev/null; then
+	proot-distro login ${PROOT_DIST} -- bash -c 'curl -sS https://starship.rs/install.sh | sh'
+	echo 'eval "$(starship init bash)"' >> ${PROOT_ROOT}/home/${PROOT_UNAME}/.bashrc
+fi
 
+# FInal message
 echo "New user ${PROOT_UNAME} in proot container ${PROOT_DIST} added!!"
 
 echo "Making symlink to start the proot Linux"
-ln -sfv  "${SCRIPT_DIR}/${PROOT_DIST}/start-${PROOT_DIST}.sh" "${SCRIPT_DIR}/../start.sh"
+ln -sfv  "${SCRIPT_DIR}/start-${PROOT_DIST}.sh" "${SCRIPT_DIR}/../start.sh"
