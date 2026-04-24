@@ -7,13 +7,13 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 termux_setup() {
-  . "${SCRIPT_DIR}/termux/setup-termux.sh" && \
-  . "${SCRIPT_DIR}/termux/install_nerdfonts.sh"
+  "${SCRIPT_DIR}/termux/setup-termux.sh"
+  "${SCRIPT_DIR}/termux/install_nerdfonts.sh"
 }
 
 linux_setup() {
   local DISTRO="${1}"
-  . "${SCRIPT_DIR}/${DISTRO}/setup-${DISTRO}.sh"
+  "${SCRIPT_DIR}/${DISTRO}/setup-${DISTRO}.sh"
 }
 
 # Initial github clone

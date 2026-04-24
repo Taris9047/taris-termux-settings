@@ -53,6 +53,11 @@ if [ ! -x "$(command -v starship)" ]; then
 		echo 'eval "$(starship init bash)"' >> ~/.bashrc
 	fi
 fi
+# Setting up starship's config file...
+if [ ! -d "${HOME}/.config" ]; then
+	mkdir -p "${HOME}/.config"
+fi
+ln -sfv "${SCRIPT_DIR}/../dotfiles/starship.toml" "${HOME}/.config/starship.toml"
 
 #
 # Adding some convenient ls aliases
