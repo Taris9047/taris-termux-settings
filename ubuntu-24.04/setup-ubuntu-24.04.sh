@@ -45,7 +45,7 @@ proot-distro login ${PROOT_DIST} -- usermod -aG sudo "${PROOT_UNAME}"
 proot-distro login ${PROOT_DIST} -- bash -c 'curl -sS https://starship.rs/install.sh | sh'
 echo 'eval "$(starship init bash)"' >> ${PROOT_ROOT}/home/${PROOT_UNAME}/.bashrc
 
-
 echo "New user ${PROOT_UNAME} in proot container ${PROOT_DIST} added!!"
 
-
+echo "Making symlink to start the proot Linux"
+ln -sfv  "${SCRIPT_DIR}/${PROOT_DIST}/start-${PROOT_DIST}.sh" "${SCRIPT_DIR}/../start.sh"

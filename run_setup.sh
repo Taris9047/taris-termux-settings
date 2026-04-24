@@ -13,9 +13,7 @@ termux_setup() {
 
 linux_setup() {
   local DISTRO="${1}"
-  termux_setup && \
-    . "${SCRIPT_DIR}/${DISTRO}/setup-${DISTRO}.sh" && \
-    . "${SCRIPT_DIR}/${DISTRO}/start-${DISTRO}.sh"
+  . "${SCRIPT_DIR}/${DISTRO}/setup-${DISTRO}.sh"
 }
 
 # Initial github clone
@@ -29,7 +27,7 @@ fi
 # Interactive menu
 echo "Taris' Termux Setup"
 PS3='Selection: '
-options=("Termux Only" "Termux+Ubuntu-24.04" "Quit")
+options=("Termux Only" "Termux+ubuntu-24.04" "Remove ubuntu-24.04" "Quit")
 
 select opt in "${options[@]}"; do
   case $opt in
@@ -39,6 +37,10 @@ select opt in "${options[@]}"; do
       ;;
     "Termux+Ubuntu-24.04")
       linux_setup "ubuntu-24.04"
+      break
+      ;;
+    "Remove ubuntu-24.04")
+      proot-distro remove "ubuntu-24.04"
       break
       ;;
     "Quit")
