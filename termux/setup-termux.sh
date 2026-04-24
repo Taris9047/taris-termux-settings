@@ -48,7 +48,7 @@ pkg install -y "${basic_programs[@]}"
 
 # Setting up git
 if [ -x "$(command -v git)" ]; then
-	git config --global core.editor "/usr/bin/vim"
+	ln -sfv "${DOTF_DIR}/gitignore" "${HOME}/.gitignore"
 fi
 
 # Installing starship
