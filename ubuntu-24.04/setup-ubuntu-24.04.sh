@@ -37,11 +37,15 @@ if [ ! -d "${PROOT_ROOT}" ]; then
 fi
 
 # Installing some packages
-proot-distro login ${PROOT_DIST} -- bash -c "export DEBIAN_FRONTEND=noninteractive; export TZ=${DETECTED_TZ}; ln -snf /usr/share/zoneinfo/\$TZ /etc/localtime; apt update && apt upgrade -y && apt install -y sudo build-essential curl wget git adduser ca-certificates software-properties-common tzdata locales" && \
-proot-distro login ${PROOT_DIST} -- bash -c "adduser ${PROOT_UNAME}"
-proot-distro login ${PROOT_DIST} -- bash -c "usermod -aG sudo ${PROOT_UNAME}"
-proot-distro login ${PROOT_DIST} -- bash -c "echo \"${PROOT_UNAME} ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/${PROOT_UNAME}"
-proot-distro login ${PROOT_DIST} -- bash -c "chmod 400 /etc/sudoers.d/${PROOT_UNAME}"
+proot-distro login ${PROOT_DIST} -- bash -c "export DEBIAN_FRONTEND=noninteractive; export TZ=${DETECTED_TZ}; ln -snf /usr/share/zoneinfo/\$TZ /etc/localtime; apt update && apt upgrade -y && apt install -y sudo build-essential curl wget git adduser ca-certificates software-properties-common tzdata locales"
+
+if ! proot-distro login ${PROOT_DIST} -- bash -c "id ${PROOT_UNAME}"; then
+	proot-distro login ${PROOT_DIST} -- bash -c "adduser ${PROOT_UNAME}"
+	proot-distro login ${PROOT_DIST} -- bash -c "usermod -aG sudo ${PROOT_UNAME}"
+	proot-distro login ${PROOT_DIST} -- bash -c "echo \"${PROOT_UNAME} ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/${PROOT_UNAME}"
+	proot-distro login ${PROOT_DIST} -- bash -c "chmod 0440 /etc/sudoers.d/${PROOT_UNAME}"
+	echo "New user ${PROOT_UNAME} in proot container ${PROOT_DIST} added!!"
+fi
 
 # Installing Starship for the user
 if ! proot-distro login ${PROOT_DIST} -- command -v "/usr/local/bin/starship" &> /dev/null; then
@@ -49,8 +53,12 @@ if ! proot-distro login ${PROOT_DIST} -- command -v "/usr/local/bin/starship" &>
 	echo 'eval "$(starship init bash)"' >> ${PROOT_ROOT}/home/${PROOT_UNAME}/.bashrc
 fi
 
-# FInal message
-echo "New user ${PROOT_UNAME} in proot container ${PROOT_DIST} added!!"
+# Now run the proot setup script as proot
+#
+printf '>>> Running setup script as proot user\n'
+proot-distro login ${PROOT_DIST} -- bash -c "bash -c \"${SCRIPT_DIR}/setup-proot-${PROOT_DIST}.sh\""
+
 
 echo "Making symlink to start the proot Linux"
 ln -sfv  "${SCRIPT_DIR}/start-${PROOT_DIST}.sh" "${SCRIPT_DIR}/../start.sh"
+
