@@ -1,18 +1,5 @@
 #!~/.config/starship.toml
 
-[battery]
-full_symbol = "🔋"
-charging_symbol = "🔌"
-discharging_symbol = "⚡"
-
-[[battery.display]]  # "bold yellow" style when capacity is between 10% and 30%
-threshold = 30
-style = "bold yellow"
-
-[[battery.display]]
-threshold = 10
-style = "bold red"
-
 [character]
 error_symbol = "[✖](bold red) "
 

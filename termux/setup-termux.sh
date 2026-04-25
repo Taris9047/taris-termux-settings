@@ -17,6 +17,7 @@ basic_programs=(
 	"npm"
 	"nodejs"
 	"wget"
+	"tmux"
 )
 
 # Making sure .bashrc exists
@@ -112,4 +113,10 @@ mkdir -p "${VIM_DIR}"
 ln -sfv "${DOTF_DIR}/vim/colors" "${VIM_DIR}/colors"
 ln -sfv "${DOTF_DIR}/vim/terminal_colors" "${VIM_DIR}/terminal_colors"
 printf '>>> VIM Settings copied for termux!\n'
+
+# TMUX
+ln -sfv "${DOTF_DIR}/tmux.conf" "${HOME}/.tmux.conf"
+[ ! -d "${HOME}/.tmux/plugins/tpm" ] && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+printf '>>> TMUX Settings copied for termux!\n'
+
 
