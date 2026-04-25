@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # NvChad installation script
 #
@@ -7,9 +7,9 @@
 # Removing previous NvChad
 #
 remove_NvChad () {
-  rm -rfv ~/.config/nvim
-  rm -rfv ~/.local/state/nvim
-  rm -rfv ~/.local/share/nvim
+  rm -rfv ${HOME}/.config/nvim
+  rm -rfv ${HOME}/.local/state/nvim
+  rm -rfv ${HOME}/.local/share/nvim
 
   # Removing flatpak version too...
   rm -rfv ~/.var/app/io.neovim.nvim/config/nvim
@@ -38,5 +38,5 @@ fi
 #
 # Actually Installing the NvChad
 #
-git clone https://github.com/NvChad/starter ~/.config/nvim && nvim
+git clone https://github.com/NvChad/starter ~/.config/nvim 
 
