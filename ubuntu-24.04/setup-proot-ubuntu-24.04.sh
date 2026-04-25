@@ -41,6 +41,16 @@ printf '>>>> In Proot: Installing some packages..\n'
 sudo apt install -y "${inst_pkg_list[@]}"
 
 #
+# Install nodejs via nvm
+#
+if [ ! -d "${HOME}/.nvm/.git" ]; then
+	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+	export NVM_DIR="${HOME}/.nvm"
+	[ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh"
+	nvm install --lts
+fi
+
+#
 # Settign up vim
 #
 if [ -x "$(command -v vim)" ]; then
@@ -61,4 +71,6 @@ if [ -x "$(command -v starship)" ]; then
 	fi
 	ln -sfv "${DOTFILES_DIR}/starship.toml" "${HOME}/.config/starship.toml"
 fi
+
+
 
