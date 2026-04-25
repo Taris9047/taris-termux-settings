@@ -20,6 +20,7 @@ basic_programs=(
 	"wget"
 	"tmux"
 	"neovim"
+	"htop"
 )
 
 # Making sure .bashrc exists
