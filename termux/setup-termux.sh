@@ -25,17 +25,30 @@ if [ ! -f "${HOME}/.bashrc" ]; then
 	cp /dev/null "${HOME}/.bashrc"
 fi
 
-# Running repo selection
-read -p "Would you like to run repo. change script? [y/n]" -n 1 -r
-echo ""
-if [[ $REPLY =~ ^[Yy]$ ]]; then
-	termux-change-repo
-fi
 
 # Courtesy update
 pkg update && pkg upgrade -y
 
 # Enable Android storage access 
+check_and_fix_termux_mirror() {
+	printf '>>> Checking Termux package mirrors...\n'
+
+	if ! apt update -y &> /dev/null; then
+		printf '>>> WARNING: Termux mirros are failing...\n'
+		printf '>>> Attempting to automatically reset to the default global mirror...\n'
+		printf 'deb https://packages.termux.dev/apt/termux-main stable main\n' > "${PREFIX}/etc/apt/sources.list"
+		printf 'deb https://packages.termux.dev/apt/termux-x11 x11 main\n' > "${PREFIX}/etc/apt/sources.list.d/x11.list"
+	
+		read -p '>>> Manually run the configuration script? [y/n]' -n 1 -r
+		printf '\n'
+		if [[ $REPLY == ^[Yy]$ ]]; then
+			termux-change-repo
+		fi
+	fi
+}
+check_and_fix_termux_mirror
+
+# Termux storage access check...
 if [ ! -d "${HOME}/storage" ]; then
 	termux-setup-storage
 fi

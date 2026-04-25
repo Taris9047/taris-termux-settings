@@ -39,7 +39,7 @@ fi
 # Installing some packages
 proot-distro login ${PROOT_DIST} -- bash -c "export DEBIAN_FRONTEND=noninteractive; export TZ=${DETECTED_TZ}; ln -snf /usr/share/zoneinfo/\$TZ /etc/localtime; apt update && apt upgrade -y && apt install -y sudo build-essential curl wget git adduser ca-certificates software-properties-common tzdata locales"
 
-if ! proot-distro login ${PROOT_DIST} -- bash -c "id ${PROOT_UNAME}"; then
+if ! proot-distro login ${PROOT_DIST} -- bash -c "id ${PROOT_UNAME} >/dev/null 2>&1"; then
 	proot-distro login ${PROOT_DIST} -- bash -c "adduser ${PROOT_UNAME}"
 	proot-distro login ${PROOT_DIST} -- bash -c "usermod -aG sudo ${PROOT_UNAME}"
 	proot-distro login ${PROOT_DIST} -- bash -c "echo \"${PROOT_UNAME} ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/${PROOT_UNAME}"
@@ -61,9 +61,9 @@ PROOT_ENV_FILE="$(echo /home/${PROOT_UNAME}/.proot_env)"
 proot-distro login --user ${PROOT_UNAME} ${PROOT_DIST} -- bash -c "cp -f /dev/null ${PROOT_ENV_FILE} && echo 'PROOT_PREFIX=${PROOT_PREFIX}' >> ${PROOT_ENV_FILE} && echo 'PROOT_HOME=${PROOT_HOME}' >> ${PROOT_ENV_FILE}"
 if ! proot-distro login --user ${PROOT_UNAME} ${PROOT_DIST} -- grep -q ".proot_env" "/home/${PROOT_UNAME}/.bashrc"; then
 	proot-distro login --user ${PROOT_UNAME} ${PROOT_DIST} -- bash -c "echo '. /home/${PROOT_UNAME}/.proot_env' >> /home/${PROOT_UNAME}/.bashrc"
-	printf '>>> Checking PROOT environmment variable from proot distro\n'
-	proot-distro login --user ${PROOT_UNAME} ${PROOT_DIST} -- bash -c '. ~/.bashrc && echo PROOT_PREFIX=${PROOT_PREFIX} && echo PROOT_HOME=${PROOT_HOME}'
 fi
+printf '>>> Checking PROOT environmment variable from proot distro\n'
+proot-distro login --user ${PROOT_UNAME} ${PROOT_DIST} -- bash -ic 'echo PROOT_PREFIX=${PROOT_PREFIX} && echo PROOT_HOME=${PROOT_HOME}'
 
 # Now run the proot setup script as proot
 #
