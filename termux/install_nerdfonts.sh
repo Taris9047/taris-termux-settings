@@ -2,6 +2,13 @@
 #
 # Installing nerdfonts...
 #
+
+if [ -d "${PREFIX}/share/termux-nf/fonts" ]; then
+	printf '>>>> Nerd Fonts found in the system\n'
+	exit 0
+fi
+
+printf '>>>> Installing Nerd Fonts\n'
 pkg update && pkg install -y curl ncurses-utils
 
 if [ ! -x "$(command -v getnf)" ]; then
