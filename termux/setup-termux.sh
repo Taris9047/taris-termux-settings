@@ -5,7 +5,8 @@
 
 # Current directory
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-DOTF_DIR="${SCRIPT_DIR}/../dotfiles/"
+DOTF_DIR="$(echo "${SCRIPT_DIR}/../dotfiles/")"
+UTILS_DIR="$(echo "${SCRIPT_DIR}/../utils/")"
 
 # Basic programs
 basic_programs=(
@@ -18,6 +19,7 @@ basic_programs=(
 	"nodejs"
 	"wget"
 	"tmux"
+	"neovim"
 )
 
 # Making sure .bashrc exists
@@ -113,6 +115,11 @@ mkdir -p "${VIM_DIR}"
 ln -sfv "${DOTF_DIR}/vim/colors" "${VIM_DIR}/colors"
 ln -sfv "${DOTF_DIR}/vim/terminal_colors" "${VIM_DIR}/terminal_colors"
 printf '>>> VIM Settings copied for termux!\n'
+
+# Neovim
+if [ -x "$(command -v nvim)" ]; then
+  "${UTILS_DIR}/install_nvchad.sh"
+fi
 
 # TMUX
 ln -sfv "${DOTF_DIR}/tmux.conf" "${HOME}/.tmux.conf"

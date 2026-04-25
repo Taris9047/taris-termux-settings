@@ -18,6 +18,7 @@ inst_pkg_list=(
 	"bison"
 	"vim"
 	"nano"
+	"lua5.4"
 )
 
 #
