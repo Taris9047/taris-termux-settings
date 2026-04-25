@@ -51,3 +51,14 @@ if [ -x "$(command -v vim)" ]; then
 	fi
 	ln -sfv "${DOTFILES_DIR}/vimrc" "${HOME}/.vimrc"
 fi
+
+#
+# Setting up starship
+#
+if [ -x "$(command -v starship)" ]; then
+	if [ ! -d "${HOME}/.config" ]; then
+		mkdir -p "${HOME}/.config"
+	fi
+	ln -sfv "${DOTFILES_DIR}/starship.toml" "${HOME}/.config/starship.toml"
+fi
+
