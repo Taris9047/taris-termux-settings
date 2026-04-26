@@ -7,6 +7,7 @@
 #
 DISTRO="${1:-ubuntu-24.04}"
 PROOT_USER="${2:-taris}"
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 # Checking of proot-distro exists
 if [ ! -x "$(command -v proot-distro)" ]; then
@@ -64,7 +65,7 @@ printf '>>> Configuring code-server for user: %s\n' "${PROOT_USER}"
 proot-distro login "${DISTRO}" --user "${PROOT_USER}" -- bash -c "
   mkdir -p ~/.config/code-server
   cat <<EOF > ~/.config/code-server/config.yaml
-vind-addr: 127.0.0.1:8080
+bind-addr: 127.0.0.1:8080
 auth: none
 cert: false
 EOF
@@ -77,4 +78,6 @@ printf '>>> To start your VS Code server as %s, run:\n' "${PROOT_USER}"
 printf 'proot-distro -login %s --user %s -- code-server' "${DISTRO}" "${PROOT_USER}"
 printf 'Then visit: http://127.0.0.1:8080\n'
 
+printf '\nor...\n'
+ln -sfv "${SCRIPT_DIR}/run_vscode_server.sh" "${SCRIPT_DIR}/../start_vscode_server.sh"
 
