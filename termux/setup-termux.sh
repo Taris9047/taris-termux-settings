@@ -99,6 +99,9 @@ fi
 if ! grep -q "alias ls=" "${HOME}/.bashrc"; then
 	echo "alias ls='ls -lh'" >> ~/.bashrc
 fi
+if ! grep -q "alias l=" "${HOME}/.bashrc"; then
+	echo "alias l='ls -CF'" >> ~/.bashrc
+fi
 
 #
 # Installing configurations
@@ -119,12 +122,20 @@ printf '>>> VIM Settings copied for termux!\n'
 
 # Neovim
 if [ -x "$(command -v nvim)" ]; then
-  "${UTILS_DIR}/install_nvchad.sh"
+	if [ ! -d "${HOME}/.config/nvim/lua" ]; then
+		"${UTILS_DIR}/install_nvchad.sh"
+	fi
 fi
 
 # TMUX
 ln -sfv "${DOTF_DIR}/tmux.conf" "${HOME}/.tmux.conf"
 [ ! -d "${HOME}/.tmux/plugins/tpm" ] && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+if [ -x "$(command -v tmux)" ]; then
+	if ! grep -q "$(command -v tmux)" "${HOME}/.bashrc"; then
+		echo "\n# Running TMUX\n$(command -v tmux)" >> "${HOME}/.bashrc"
+	fi
+fi
 printf '>>> TMUX Settings copied for termux!\n'
+
 
 
