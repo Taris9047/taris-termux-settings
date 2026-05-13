@@ -11,5 +11,8 @@ if [ ! -x "$(command -v proot-distro)" ]; then
   exit 1
 fi
 
+printf ">>> Checking for vscode-server updates...\n"
+proot-distro login "${DISTRO}" -- bash -c "curl -fsSL https://code-server.dev/install.sh | sh"
+
 printf '>>> Running vscode-server\n'
 proot-distro login ${DISTRO} --user "${PROOT_USER}" -- code-server
