@@ -4,7 +4,7 @@
 #
 
 DISTRO="${1:-ubuntu-24.04}"
-PROOT_USER="${2:-taris}"
+PROOT_USER="${2:-$USER}"
 
 if [ ! -x "$(command -v proot-distro)" ]; then
   printf 'proot-distro seems to be missing!\n'
